@@ -60,8 +60,8 @@ services:
       - USER_DATA_STORE_API_KEY=demo-authentication-service-api-key
       - ACCESS_CONTROL_API_KEY=demo-authentication-service-api-key
       - ALLOWED_API_KEYS=demo-management-layer-api-key
-      - ACCESS_CONTROL_API=http://core-access-control:8080/api/v1
-      - USER_DATA_STORE_API=http://core-user-data-store:8080/api/v1
+      - ACCESS_CONTROL_API=http://core-access-control/api/v1
+      - USER_DATA_STORE_API=http://core-user-data-store/api/v1
       - EMAIL_HOST=smtp
       # Migrations can no longer be run without a specific env var being set specifically for it.
       - SKIP_MIGRATIONS=1
@@ -101,8 +101,8 @@ services:
       - SKIP_MIGRATIONS=1
       - USER_DATA_STORE_API_KEY=demo-authentication-service-celery-api-key
       - ACCESS_CONTROL_API_KEY=demo-authentication-service-celery-api-key
-      - ACCESS_CONTROL_API=http://core-access-control:8080/api/v1
-      - USER_DATA_STORE_API=http://core-user-data-store:8080/api/v1
+      - ACCESS_CONTROL_API=http://core-access-control/api/v1
+      - USER_DATA_STORE_API=http://core-user-data-store/api/v1
       - KINESIS_SESSION=aws_access_key_id=foobar,aws_secret_access_key=foobar,region_name=us-east-1
       - KINESIS_PRODUCER=stream_name=test-stream
       - KINESIS_BOTO3_CLIENT_SETTINGS=endpoint_url=http://localstack:4568
@@ -125,15 +125,15 @@ services:
       - CACHE_TIME=60
       - STUBS_CLASS=management_layer.integration.Implementation
       # - PYTHONASYNCIODEBUG=1
-      - ACCESS_CONTROL_API=http://core-access-control:8080/api/v1
-      - AUTHENTICATION_SERVICE_API=http://core-authentication-service:8000/api/v1
-      - USER_DATA_STORE_API=http://core-user-data-store:8080/api/v1
-      - AUTHENTICATION_SERVICE_JWKS=http://core-authentication-service:8000/openid/jwks
+      - ACCESS_CONTROL_API=http://core-access-control/api/v1
+      - AUTHENTICATION_SERVICE_API=http://core-authentication-service/api/v1
+      - USER_DATA_STORE_API=http://core-user-data-store/api/v1
+      - AUTHENTICATION_SERVICE_JWKS=http://core-authentication-service/openid/jwks
       - WITH_UI=true
       - UI_HOST=core-management-layer
       - JWT_SECRET=management_layer_workaround
       - JWT_AUDIENCE=management_portal
-      - JWT_ISSUER=http://core-authentication-service:8000/openid
+      - JWT_ISSUER=http://core-authentication-service/openid
       - ACCESS_CONTROL_API_KEY=demo-management-layer-api-key
       - AUTHENTICATION_SERVICE_API_KEY=demo-management-layer-api-key
       - USER_DATA_STORE_API_KEY=demo-management-layer-api-key
@@ -168,11 +168,11 @@ services:
     build:
       context: ../../core-management-portal/
       args:
-        - REACT_APP_AUTHORIZATION_ENDPOINT=http://core-authentication-service:8000/openid/authorize/
-        - REACT_APP_AUTHORIZATION_USER_ENDPOINT=http://core-authentication-service:8000/openid/userinfo/
+        - REACT_APP_AUTHORIZATION_ENDPOINT=http://core-authentication-service/openid/authorize/
+        - REACT_APP_AUTHORIZATION_USER_ENDPOINT=http://core-authentication-service/openid/userinfo/
         - REACT_APP_CLIENT_ID=management_portal
-        - REACT_APP_LOGOUT_URL=http://core-authentication-service:8000/openid/end-session/
-        - REACT_APP_MANAGEMENT_LAYER=http://core-management-layer:8000
+        - REACT_APP_LOGOUT_URL=http://core-authentication-service/openid/end-session/
+        - REACT_APP_MANAGEMENT_LAYER=http://core-management-layer
         - REACT_APP_PORTAL_URL=http://core-management-portal/
         - REACT_APP_PORTAL_LOGIN_CALLBACK=#/oidc/callback?
     depends_on:
@@ -187,6 +187,8 @@ services:
     # To rather mount localhost postgres data.
     #volumes:
     #    - "/var/lib/postgresql/data:/var/lib/postgresql/data"
+    environment:
+        - POSTGRES_HOST_AUTH_METHOD=trust
     networks:
       - oidcnetwork
 
@@ -247,6 +249,14 @@ services:
     networks:
       - oidcnetwork
 
+  nginx:
+        build:
+            context: ../apps/nginx/
+        networks:
+            oidcnetwork:
+                ipv4_address: 192.168.19.100
+
+
   # The name "core-robot" was chosen so that this container is accessible via
   # the squid proxy, which are configured to service URLs starting with "core-".
   #core-robot:
@@ -275,9 +285,9 @@ services:
   #  networks:
   #    - oidcnetwork
 
-# This network definition limits the IP range that can be used.
-# This is convenient because we need to refer to the IP range in the
-# proxy.pac file.
 networks:
-  oidcnetwork:
-    external: true
+    oidcnetwork:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 192.168.19.0/24

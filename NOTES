@@ -1,0 +1,22 @@
+make docker-network
+make build-run-core en daarna make run-core
+
+
+clone ook  git+https://github.com/girleffect/core-shared@1.3.3#egg=core-shared
+
+-e git+https://github.com/praekelt/swagger-django-generator.git@master#egg=swagger-django-generator
+-e git+https://github.com/praekelt/apitools@master#egg=apitools
+-e git+https://github.com/girleffect/core-kinesis-conducer@develop#egg=core-kinesis-conducer
+
+sudo apt-get install meld op host os
+
+Yarn werk in core-management-portal
+in portal on local fs do build-virtualenv
+make generate-admin
+
+
+Gaan na core-authentication-service container en doen
+python manage.py demo_content (currently fails in the end)
+
+Gaan na http://core-authentication-service/admin dalk?
+
