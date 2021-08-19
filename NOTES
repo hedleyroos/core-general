@@ -1,3 +1,6 @@
+sudo vi /etc/hosts
+192.168.19.100 core-management-portal core-access-control core-user-data-store core-authentication-service core-management-layer
+
 make docker-network
 make build-run-core en daarna make run-core
 
@@ -14,6 +17,8 @@ Yarn werk in core-management-portal
 in portal on local fs do build-virtualenv
 make generate-admin
 
+Gaan na core-access-control en doen
+python seed_data.py
 
 Gaan na core-authentication-service container en doen
 python manage.py demo_content (currently fails in the end)

@@ -76,6 +76,7 @@ services:
       - WAGTAIL_1_LOGOUT_REDIRECT=http://wagtail-demo-1-site-1:8000/
       - WAGTAIL_2_LOGOUT_REDIRECT=http://wagtail-demo-2-site-1:8000/
       - WAGTAIL_3_LOGOUT_REDIRECT=http://wagtail-demo-1-site-2:8000/
+      - DEBUG=True
     depends_on:
       - db
       - smtp
