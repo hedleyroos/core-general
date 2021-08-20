@@ -19,9 +19,20 @@ make generate-admin
 
 Gaan na core-access-control en doen
 python seed_data.py
+python bootstrap_management_portal.py 7 (die 7 is die pk van die management portal oids provider)
+Vind Cobus user se uuid
+python bootstrap_tech_admin_user.py  f8c437c6-0196-11ec-8758-0242c0a8130b
 
 Gaan na core-authentication-service container en doen
 python manage.py demo_content (currently fails in the end)
 
-Gaan na http://core-authentication-service/admin dalk?
+Op core auth container:
+echo "from authentication_service.models import CoreUser; CoreUser.objects.create_superuser(username='cobusc', email='cobusc@praekeltconsulting.com', password='something', birth_date='1979-01-13')" | python manage.py shell
+python manage.py creatersakey
+
+Wait two minutes for the management-layer to refresh before proceeding
+
+Private browser:
+http://core-management-portal/#/login
+Op volgende page cobusc, something.
 
