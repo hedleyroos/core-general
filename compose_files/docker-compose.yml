@@ -47,7 +47,6 @@ services:
       context: ../../core-authentication-service/
     volumes:
       - "../../core-authentication-service/:/app/"
-    command: scripts/startDjango.sh
     environment:
       - REDIS_URI=redis://redis:6379/3
       # NOTE: we bootstrap our database container with some dbs.
