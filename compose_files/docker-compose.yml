@@ -252,6 +252,15 @@ services:
   nginx:
         build:
             context: ../apps/nginx/
+        ports:
+          - target: 80
+            published: 80
+            protocol: tcp
+            mode: host
+          - target: 443
+            published: 443
+            protocol: tcp
+            mode: host
         networks:
             oidcnetwork:
                 ipv4_address: 192.168.19.100
