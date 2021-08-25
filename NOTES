@@ -27,7 +27,7 @@ Gaan na core-authentication-service container en doen
 python manage.py demo_content (currently fails in the end)
 
 Op core auth container:
-echo "from authentication_service.models import CoreUser; CoreUser.objects.create_superuser(username='cobusc', email='cobusc@praekeltconsulting.com', password='something', birth_date='1979-01-13')" | python manage.py shell
+echo "from authentication_service.models import CoreUser; CoreUser.objects.create_superuser(username='cobusc', email='cobusc@praekeltconsulting.com', password='something', birth_date='1979-01-13', pk='f8c437c6-0196-11ec-8758-0242c0a8130b')" | python manage.py shell
 python manage.py creatersakey
 
 Wait two minutes for the management-layer to refresh before proceeding

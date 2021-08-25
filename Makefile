@@ -79,6 +79,14 @@ run-core: build-virtualenv
 	@echo "$(CYAN)Running docker-compose for core services....$(CLEAR)"
 	@sudo $(VENV)/bin/docker-compose -f compose_files/docker-compose.yml -f compose_files/docker-compose.core-management-portal.yml up
 
+build-run-core-detached: build-virtualenv
+	@echo "$(CYAN)Building and running docker-compose for core services...$(CLEAR)"
+	@sudo $(VENV)/bin/docker-compose -f compose_files/docker-compose.yml -f compose_files/docker-compose.core-management-portal.yml up --build --detach
+
+run-core-detached: build-virtualenv
+	@echo "$(CYAN)Running docker-compose for core services....$(CLEAR)"
+	@sudo $(VENV)/bin/docker-compose -f compose_files/docker-compose.yml -f compose_files/docker-compose.core-management-portal.yml up --detach
+
 build-run-core-with-aws: build-virtualenv
 	@echo "$(CYAN)Building and running docker-compose for core services alongside AWS localstack...$(CLEAR)"
 	@sudo $(VENV)/bin/docker-compose -f compose_files/docker-compose.yml -f compose_files/docker-compose.core-management-portal.yml -f compose_files/docker-compose.localstack.yml up --build
