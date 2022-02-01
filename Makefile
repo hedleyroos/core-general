@@ -69,7 +69,7 @@ docs-build:  $(VENV)
 	@echo "$(GREEN)DONE$(CLEAR)"
 
 docker-network:
-	docker network create --subnet=172.18.0.0/24 --gateway=172.18.0.1 oidcnetwork
+	docker network create --subnet=172.18.0.0/24 --gateway=172.18.0.1 oidcnetwork || true
 
 build-run-core: build-virtualenv
 	@echo "$(CYAN)Building and running docker-compose for core services...$(CLEAR)"
